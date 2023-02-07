@@ -21,37 +21,43 @@ namespace RaceTo21
                 foreach (string cardSuit in suits)
                 {
                     string cardName;
+                    string pngName;
                     string cardLongName;
 
                     switch (cardVal)
                     {
                         case 1:
                             cardName = "A";
+                            pngName = "A";
                             cardLongName = "Ace";
                             break;
                         case 11:
                             cardName = "J";
+                            pngName = "J";
                             cardLongName = "Jack";
                             break;
                         case 12:
                             cardName = "Q";
+                            pngName = "Q";
                             cardLongName = "Queen";
                             break;
                         case 13:
                             cardName = "K";
+                            pngName = "K";
                             cardLongName = "King";
                             break;
                         default:
                             cardName = cardVal.ToString();
+                            pngName = cardVal.ToString().PadLeft(2, '0'); // to set 0 before a single digit number in png name
                             cardLongName = cardName;
                             break;
                     }
-                    cards.Add(new Card(cardName + cardSuit.First<char>(), cardLongName + " of " + cardSuit));
+                    cards.Add(new Card(cardName + cardSuit.First<char>(), cardLongName + " of " + cardSuit)); // Adding the Card string to Card List
 
-                    imageIDs[cards[cardCounter].id] = $"card_{cardSuit}_{cardName}.png";
+                    imageIDs[cards[cardCounter].id] = $"card_{cardSuit.ToLower()}_{pngName}.png"; // adding field and value to Dictionary imageIDs.
                     cardCounter++;
 
-                    Console.WriteLine($"card_{cardSuit}_{cardName}.png");
+                    Console.WriteLine($"card_{cardSuit.ToLower()}_{pngName}.png");
 
 
 

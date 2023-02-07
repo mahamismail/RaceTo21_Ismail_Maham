@@ -55,40 +55,32 @@ namespace RaceTo21
             else if (nextTask == Task.IntroducePlayers)
             {   
                 cardTable.ShowPlayers(players);
-                nextTask = Task.ShowBigScores; // DISPLAY OVERALL SCORES
-            }
-            else if (nextTask == Task.ShowBigScores)
-            {
-                //cardTable.ShowOverallScore(); // CALL FUNCTION SHOW OVERALL SCORE ////////////////////// NOT WORKING
                 nextTask = Task.PlayerTurn;
+                //nextTask = Task.ShowBigScores; // DISPLAY OVERALL SCORES
             }
+            //else if (nextTask == Task.ShowBigScores)
+            //{
+            //    //cardTable.ShowOverallScore(); // CALL FUNCTION SHOW OVERALL SCORE ////////////////////// NOT WORKING
+            //    nextTask = Task.PlayerTurn;
+            // }
             else if (nextTask == Task.PlayerTurn)
             {
                 cardTable.ShowHands(players);
                 Player player = players[currentPlayer];
                 if (player.status == PlayerStatus.active)
                 {
-                    /*************** FEATURE TO DO ****************************
-                 
-                    * A player can choose to draw up to 3 cards each turn, but they get all cards at once; they don’t get to 
-                    decide after each card (more risk, but can get to 21 faster!)
-                
-                    SO FAR:
-                    Only added a loop for 3 cards to be chosen by default
-
-                    TO DO:
-                    In OfferACard function ask input from player to chose between 1,2,3 cards.
-                    According to input, add loop here.
-
-                     ************************************/
 
                     if (cardTable.OfferACard(player))
                     {
-                        for (var i = 0; i < 3; i++)
+                        cardTable.HowManyCards(player); // calling the HowManyCards function to getting the
+                        int numOfCards = cardTable.numOfCardsPicked; // here i am calling the numOfCardsPicked from cardTable
+
+                        for (var i = 0; i < numOfCards; i++) 
                         {
-                            Card card = deck.DealTopCard();
-                            player.cards.Add(card);
+                            Card card = deck.DealTopCard(); ///////////////// BUG: THESE TWO LINES ARE CURRENTLY BEING SKIPPED
+                            player.cards.Add(card); ///////////////////////////////////////////////////////////////////
                         }
+
                         player.score = ScoreHand(player);
                         if (player.score > 21)
                         {
@@ -183,25 +175,29 @@ namespace RaceTo21
             return false; // everyone has stayed or busted, or someone won!
         }
 
+        /*
+        This bool CheckForWinAndBust() returns true if win
+         or if all are bust except one player. Else returns false.
+        */
         public bool CheckForWinAndBust()
         {
             int counter = 0;
 
             foreach (var player in players)
             {
-                if (player.status == PlayerStatus.active)
+                if (player.status == PlayerStatus.active) // if player active
                 {
-                    return false; // at least one player is still going!
+                    return false; // means at least one player is still going!
                 }
-                else if (player.status == PlayerStatus.win)
+                else if (player.status == PlayerStatus.win) // if player wins
                 {
                     return true;
                 }
-                else if (player.status == PlayerStatus.bust)
+                else if (player.status == PlayerStatus.bust) // if player is bust
                 {
-                    counter++;
+                    counter++; // this number of busts so far
 
-                    if (counter == players.Count - 1)
+                    if (counter == players.Count - 1) // checking if the number of busts are one less than the number total players. Means one person is not bust.
                     {
                         return true;
                     }
@@ -213,32 +209,32 @@ namespace RaceTo21
         public Player DoFinalScoring()
         {
             int highScore = 0;
-            int overallScore;
+            //int overallScore;
 
             foreach (var player in players)
             {
                 cardTable.ShowHand(player);
-                if (player.status == PlayerStatus.win) // someone hit 21
-                {
-                    overallScore = player.gameScore;
-                    overallScore = overallScore + player.score; // ADD THE SCORE TO THE PLAYER'S OVERALL SCORE IF WIN
+                //if (player.status == PlayerStatus.win) // someone hit 21
+                //{
+                //    overallScore = player.gameScore;
+                //   //overallScore = overallScore + player.score; // ADD THE SCORE TO THE PLAYER'S OVERALL SCORE IF WIN
 
-                    return player;
-                }
-                if (player.status == PlayerStatus.stay || player.status == PlayerStatus.active) // still could win...
-                {
-                    if (player.score > highScore)
-                    {
-                        highScore = player.score; // PLAYER'S OVERALL SCORE REMAINS THE SAME IF STAY
+                //    return player;
+                //}
+                //if (player.status == PlayerStatus.stay || player.status == PlayerStatus.active) // still could win...
+                //{
+                //    if (player.score > highScore)
+                //    {
+                //      highScore = player.score; // PLAYER'S OVERALL SCORE REMAINS THE SAME IF STAY
 
-                        overallScore = player.gameScore;
-                    }
-                }
-                if (player.status == PlayerStatus.bust) // player went bust...
-                {
-                    overallScore = player.gameScore;
-                    overallScore = overallScore - player.score; // DEDUCT THE SCORE FROM THE PLAYER'S OVERALL SCORE IF BUST
-                }
+                //        //overallScore = player.gameScore;
+                //    }
+                //}
+                //if (player.status == PlayerStatus.bust) // player went bust...
+                //{
+                //    overallScore = player.gameScore;
+                //    overallScore = overallScore - player.score; // DEDUCT THE SCORE FROM THE PLAYER'S OVERALL SCORE IF BUST
+                //}
             }
             if (highScore > 0) // someone scored, anyway!
             {

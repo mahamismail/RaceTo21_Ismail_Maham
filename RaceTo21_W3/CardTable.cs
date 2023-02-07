@@ -10,6 +10,8 @@ namespace RaceTo21
             Console.WriteLine("Setting Up Table...");
         }
 
+        public int numOfCardsPicked;
+
         /* Shows the name of each player and introduces them by table position.
          * Is called by Game object.
          * Game object provides list of players.
@@ -60,12 +62,57 @@ namespace RaceTo21
             return response;
         }
 
+        /*************** FEATURE TO DO ****************************
+
+        * A player can choose to draw up to 3 cards each turn, but they get all cards at once; they don’t get to 
+        decide after each card (more risk, but can get to 21 faster!)
+
+        SO FAR:
+        - Created a new public int HowManyCards that returns numOfCardsPicked.
+        - This function reads the response and sets the numOfCardsPicked to 1, 2 or 3 accordingly.
+        - This numOfCardsPicked is taken to the Task.PlayerTurn in Games and used as the number of loops 
+        needed to get the top card in the deck and Add a Card.
+
+        BUGS:
+        Currently it works, but it broke the WIN and Bust
+         ************************************/
+
+        public int HowManyCards(Player player)
+        {
+            Console.Write("How many? (1/2/3)");
+            string response = Console.ReadLine();
+
+            if (response.ToUpper().StartsWith("3"))
+            {
+                numOfCardsPicked = 3;
+                return numOfCardsPicked;
+            }
+            else if (response.ToUpper().StartsWith("2"))
+            {
+                numOfCardsPicked = 2;
+                return numOfCardsPicked;
+            }
+            else if (response.ToUpper().StartsWith("1"))
+            {
+                numOfCardsPicked = 1;
+                return numOfCardsPicked;
+            }
+            else
+            {
+                Console.WriteLine("Invalid number of cards.");
+                Console.Write("How many players?");
+                response = Console.ReadLine();
+            }
+            return numOfCardsPicked;
+        }
+
         public bool OfferACard(Player player)
         {
             while (true)
             {
-                Console.Write(player.name + ", do you want 3 cards? (Y/N)");
+                Console.Write(player.name + ", do you want cards? (Y/N)");
                 string response = Console.ReadLine();
+
                 if (response.ToUpper().StartsWith("Y"))
                 {
                     return true;
