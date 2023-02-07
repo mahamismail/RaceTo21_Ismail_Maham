@@ -11,7 +11,7 @@ namespace RaceTo21
         Deck deck = new Deck(); // deck of cards
         int currentPlayer = 0; // current player on list
         public Task nextTask; // keeps track of game state
-        private bool cheating = true; // lets you cheat for testing purposes if true
+        private bool cheating = false; // lets you cheat for testing purposes if true
 
         public Game(CardTable c)
         {
@@ -27,6 +27,7 @@ namespace RaceTo21
         public void AddPlayer(string n)
         {
             players.Add(new Player(n));
+
         }
 
         /* Figures out what task to do next in game
@@ -52,8 +53,13 @@ namespace RaceTo21
                 nextTask = Task.IntroducePlayers;
             }
             else if (nextTask == Task.IntroducePlayers)
-            {
+            {   
                 cardTable.ShowPlayers(players);
+                nextTask = Task.ShowBigScores; // DISPLAY OVERALL SCORES
+            }
+            else if (nextTask == Task.ShowBigScores)
+            {
+                //cardTable.ShowOverallScore(); // CALL FUNCTION SHOW OVERALL SCORE ////////////////////// NOT WORKING
                 nextTask = Task.PlayerTurn;
             }
             else if (nextTask == Task.PlayerTurn)
@@ -62,10 +68,27 @@ namespace RaceTo21
                 Player player = players[currentPlayer];
                 if (player.status == PlayerStatus.active)
                 {
+                    /*************** FEATURE TO DO ****************************
+                 
+                    * A player can choose to draw up to 3 cards each turn, but they get all cards at once; they don’t get to 
+                    decide after each card (more risk, but can get to 21 faster!)
+                
+                    SO FAR:
+                    Only added a loop for 3 cards to be chosen by default
+
+                    TO DO:
+                    In OfferACard function ask input from player to chose between 1,2,3 cards.
+                    According to input, add loop here.
+
+                     ************************************/
+
                     if (cardTable.OfferACard(player))
                     {
-                        Card card = deck.DealTopCard();
-                        player.cards.Add(card);
+                        for (var i = 0; i < 3; i++)
+                        {
+                            Card card = deck.DealTopCard();
+                            player.cards.Add(card);
+                        }
                         player.score = ScoreHand(player);
                         if (player.score > 21)
                         {
@@ -112,6 +135,7 @@ namespace RaceTo21
         public int ScoreHand(Player player)
         {
             int score = 0;
+
             if (cheating == true && player.status == PlayerStatus.active)
             {
                 string response = null;
@@ -144,6 +168,7 @@ namespace RaceTo21
                 }
             }
             return score;
+
         }
 
         public bool CheckActivePlayers()
@@ -188,21 +213,32 @@ namespace RaceTo21
         public Player DoFinalScoring()
         {
             int highScore = 0;
+            int overallScore;
+
             foreach (var player in players)
             {
                 cardTable.ShowHand(player);
                 if (player.status == PlayerStatus.win) // someone hit 21
                 {
+                    overallScore = player.gameScore;
+                    overallScore = overallScore + player.score; // ADD THE SCORE TO THE PLAYER'S OVERALL SCORE IF WIN
+
                     return player;
                 }
                 if (player.status == PlayerStatus.stay || player.status == PlayerStatus.active) // still could win...
                 {
                     if (player.score > highScore)
                     {
-                        highScore = player.score;
+                        highScore = player.score; // PLAYER'S OVERALL SCORE REMAINS THE SAME IF STAY
+
+                        overallScore = player.gameScore;
                     }
                 }
-                // if busted don't bother checking!
+                if (player.status == PlayerStatus.bust) // player went bust...
+                {
+                    overallScore = player.gameScore;
+                    overallScore = overallScore - player.score; // DEDUCT THE SCORE FROM THE PLAYER'S OVERALL SCORE IF BUST
+                }
             }
             if (highScore > 0) // someone scored, anyway!
             {

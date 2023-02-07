@@ -14,7 +14,7 @@ namespace RaceTo21
             string[] suits = { "Spades", "Hearts", "Clubs", "Diamonds" };
             int cardCounter = 0;
 
-            Dictionary<string, string> imageIDs = new Dictionary<string, string>();
+            Dictionary<string, string> imageIDs = new Dictionary<string, string>(); // add a dictionary for keeping image png Ids
 
             for (int cardVal = 1; cardVal <= 13; cardVal++)
             {

@@ -64,7 +64,7 @@ namespace RaceTo21
         {
             while (true)
             {
-                Console.Write(player.name + ", do you want a card? (Y/N)");
+                Console.Write(player.name + ", do you want 3 cards? (Y/N)");
                 string response = Console.ReadLine();
                 if (response.ToUpper().StartsWith("Y"))
                 {
@@ -79,6 +79,34 @@ namespace RaceTo21
                     Console.WriteLine("Please answer Y(es) or N(o)!");
                 }
             }
+        }
+
+        /*********************** FEATURE TO DO *******************************
+        Only the winning player earns points equal to their score that round. 
+            o Players who went “bust” lose points equal to their hand total minus 21. 
+            o Players who “stay” earn no points for the round. 
+            o Game ends when one player reaches an agreed-upon score (for example, 100 points) or after an 
+            agreed-upon number of rounds. 
+                • Allow players to customize this number (rounds or score, whichever you choose) at start 
+                of game. 
+                    • At start of game, let players choose whether game will last a specific number of 
+                    rounds or until an agreed-upon score is reached.
+        
+        SO FAR:
+        - Set a public int for overall Score in Player class called gameScore
+        - Made gameScore additions and subtractions in the function showFinalScores()
+        - Created enum Task ShowBigScore
+        - Created function ShowOverAllScore, which when called writes to console and displays player's overall game score.
+        - This function is called when Task is set to ShowBigScore
+        - Set task to ShowBigScores once all players are introduced.
+        - Set task to ShowBigScores once CheckForEnd is true and once someone has won or gone bust (Probably after GameOver?); then move forward.
+        
+        BUG: 
+        - ShowOverAllScore() is not being recognized in the Game class when Task is ShowBigScore.
+         */
+        public void ShowOverallScore(Player player)
+        {
+            Console.Write(player.name + "'s Overall Score: " + player.gameScore);
         }
 
         public void ShowHand(Player player)
