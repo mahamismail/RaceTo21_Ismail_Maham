@@ -54,14 +54,22 @@ namespace RaceTo21
                     }
                     cards.Add(new Card(cardName + cardSuit.First<char>(), cardLongName + " of " + cardSuit)); // Adding the Card string to Card List
 
-                    imageIDs[cards[cardCounter].id] = $"card_{cardSuit.ToLower()}_{pngName}.png"; // adding field and value to Dictionary imageIDs.
+                    var keyofimage = cards[cardCounter].id;
                     cardCounter++;
 
-                    Console.WriteLine($"card_{cardSuit.ToLower()}_{pngName}.png");
+                    imageIDs[$"{keyofimage}"] = $"card_{cardSuit.ToLower()}_{pngName}.png"; // adding field and value to Dictionary imageIDs.
+                    
 
-
+                    //Console.WriteLine(imageIDs["KS"]);
+                    //Console.WriteLine(cards.id);
 
                 }
+            }
+
+            foreach (string key in imageIDs.Keys)
+            {
+                Console.Write(key + ":" + imageIDs[key]); // show all png names
+                Console.WriteLine();
             }
         }
 
