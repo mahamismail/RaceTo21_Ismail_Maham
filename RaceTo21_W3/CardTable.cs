@@ -5,30 +5,19 @@ namespace RaceTo21
 {
     public class CardTable
     {
+        // Call a CardTable object.
         public CardTable()
         {
             Console.WriteLine("Setting Up Table...");
         }
 
-        public int numOfCardsPicked;
+        public int numOfCardsPicked; // public int used in HowManyCards()
 
-        /* Shows the name of each player and introduces them by table position.
-         * Is called by Game object.
-         * Game object provides list of players.
-         * Calls Introduce method on each player object.
-         */
-        public void ShowPlayers(List<Player> players)
-        {
-            for (int i = 0; i < players.Count; i++)
-            {
-                players[i].Introduce(i+1); // List is 0-indexed but user-friendly player positions would start with 1...
-            }
-        }
-
-        /* Gets the user input for number of players.
-         * Is called by Game object.
+        /* Function: GetNumberOfPlayers() ****************
+         * Reads the user input from player.
+         * Called by Game object during player turn.
          * Returns number of players to Game object.
-         */
+         *****************************************/
         public int GetNumberOfPlayers()
         {
             Console.Write("How many players? ");
@@ -44,11 +33,12 @@ namespace RaceTo21
             return numberOfPlayers;
         }
 
-        /* Gets the name of a player
-         * Is called by Game object
+        /* Function: GetPlayerName() ****************
+         * Reads the user input for name.
+         * Called by Game object during player turn.
          * Game object provides player number
-         * Returns name of a player to Game object
-         */
+         * Returns name of player to Game object
+         *****************************************/
         public string GetPlayerName(int playerNum)
         {
             Console.Write("What is the name of player# " + playerNum + "? ");
@@ -62,70 +52,56 @@ namespace RaceTo21
             return response;
         }
 
-        /*************** FEATURE TO DO ****************************
+        /* Function: ShowPlayers() ****************
+         * Displays names of all players and introduces them by table position.
+         * Called by Game object during player turn.
+         * Game object provides list of players
+         * Calls Introduce method on each player object.
+         *****************************************/
+        public void ShowPlayers(List<Player> players)
+        {
+            for (int i = 0; i < players.Count; i++)
+            {
+                players[i].Introduce(i + 1); // List is 0-indexed but user-friendly player positions would start with 1...
+            }
+        }
 
-        * A player can choose to draw up to 3 cards each turn, but they get all cards at once; they don’t get to 
-        decide after each card (more risk, but can get to 21 faster!)
-
-        SO FAR:
-        - Created a new public int HowManyCards that returns numOfCardsPicked.
-        - This function reads the response and sets the numOfCardsPicked to 1, 2 or 3 accordingly.
-        - This numOfCardsPicked is taken to the Task.PlayerTurn in Games and used as the number of loops 
-        needed to get the top card in the deck and Add a Card.
-
-        BUGS:
-        Currently it works, but it broke the WIN and Bust
+        /* Function: HowManyCards() **********
+         * Reads the user input of how many cards they will pick. 
+         * Can be a maximum of 3 cards. (0,1,2,3) - 0 being STAY
+         * Uses player as parameter.
+         * Uses cardTable's public int numOfCardsPicked
+         * Called in the Game object during Player Turn
+         * Returns numOfCardsPicked
          ************************************/
-
         public int HowManyCards(Player player)
         {
-            Console.Write("How many? (1/2/3)");
+            Console.Write( player.name + ": How many? (0/1/2/3)");
             string response = Console.ReadLine();
 
-            if (response.ToUpper().StartsWith("3"))
+            if (response.ToUpper().StartsWith("3")) // Pick 3
             {
                 numOfCardsPicked = 3;
-                return numOfCardsPicked;
             }
-            else if (response.ToUpper().StartsWith("2"))
+            else if (response.ToUpper().StartsWith("2")) // Pick 2
             {
                 numOfCardsPicked = 2;
-                return numOfCardsPicked;
             }
-            else if (response.ToUpper().StartsWith("1"))
+            else if (response.ToUpper().StartsWith("1")) // Pick 1
             {
                 numOfCardsPicked = 1;
-                return numOfCardsPicked;
+            }
+            else if (response.ToUpper().StartsWith("0")) // This is stay
+            {
+                numOfCardsPicked = 0;
             }
             else
             {
-                Console.WriteLine("Invalid number of cards.");
+                Console.WriteLine("Invalid number of cards. Choose 0, 1, 2, or 3!");
                 Console.Write("How many players?");
                 response = Console.ReadLine();
             }
             return numOfCardsPicked;
-        }
-
-        public bool OfferACard(Player player)
-        {
-            while (true)
-            {
-                Console.Write(player.name + ", do you want cards? (Y/N)");
-                string response = Console.ReadLine();
-
-                if (response.ToUpper().StartsWith("Y"))
-                {
-                    return true;
-                }
-                else if (response.ToUpper().StartsWith("N"))
-                {
-                    return false;
-                }
-                else
-                {
-                    Console.WriteLine("Please answer Y(es) or N(o)!");
-                }
-            }
         }
 
         /*********************** FEATURE TO DO *******************************
@@ -134,10 +110,6 @@ namespace RaceTo21
             o Players who “stay” earn no points for the round. 
             o Game ends when one player reaches an agreed-upon score (for example, 100 points) or after an 
             agreed-upon number of rounds. 
-                • Allow players to customize this number (rounds or score, whichever you choose) at start 
-                of game. 
-                    • At start of game, let players choose whether game will last a specific number of 
-                    rounds or until an agreed-upon score is reached.
         
         SO FAR:
         - Set a public int for overall Score in Player class called gameScore
@@ -151,11 +123,9 @@ namespace RaceTo21
         BUG: 
         - ShowOverAllScore() is not being recognized in the Game class when Task is ShowBigScore.
          */
-        public void ShowOverallScore(Player player)
-        {
-            Console.Write(player.name + "'s Overall Score: " + player.gameScore);
-        }
 
+        /* Function: ShowHand() **********
+        ************************************/
         public void ShowHand(Player player)
         {
             if (player.cards.Count > 0)
@@ -185,6 +155,14 @@ namespace RaceTo21
             }
         }
 
+        /* Function: ShowHands() **********
+         * Shows the hands of each player from the list of players.
+         * Uses list of player as parameter.
+         * Uses cardTable's public int numOfCardsPicked
+         * Called in the Game object during Player Turn
+         * Returns numOfCardsPicked
+         ************************************/
+
         public void ShowHands(List<Player> players)
         {
             foreach (Player player in players)
@@ -193,7 +171,28 @@ namespace RaceTo21
             }
         }
 
+        /* Function: ShowOverallScore() ****************
+         * Displays overall scores of all players
+         * Called by Game object at the end of the game.
+         * Game object provides player name and overallScore.
+         *****************************************/
 
+        /*public void ShowOverallScore(Player player)
+        {
+            Console.Write(player.name + "'s Overall Score: " + player.overallScore);
+        }
+
+        public void ShowOverAllScores(List<Player> players)
+        {
+            foreach (Player player in players)
+            {
+                ShowOverallScore(player);
+            }
+        }
+        */
+
+        /* Function: AnnounceWinner() **********
+         ************************************/
         public void AnnounceWinner(Player player)
         {
             if (player != null)
@@ -208,4 +207,23 @@ namespace RaceTo21
             while (Console.ReadKey().Key != ConsoleKey.Enter) { }
         }
     }
+
+    /************* DEPRECATED *****************************
+
+    public bool OfferACard(Player player)
+    {
+        while (true)
+        {
+            if (numOfCardsPicked == 1 || numOfCardsPicked == 2 || numOfCardsPicked == 3)
+            {
+                return true;
+            }
+            else if (numOfCardsPicked == 0)
+            {
+                return false;
+            }
+        }
+    }
+
+    ******************************************************/
 }

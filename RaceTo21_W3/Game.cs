@@ -17,7 +17,7 @@ namespace RaceTo21
         {
             cardTable = c;
             deck.Shuffle();
-            deck.ShowAllCards();
+            //deck.ShowAllCards();
             nextTask = Task.GetNumberOfPlayers;
         }
 
@@ -69,18 +69,19 @@ namespace RaceTo21
                 Player player = players[currentPlayer];
                 if (player.status == PlayerStatus.active)
                 {
-
-                    if (cardTable.OfferACard(player))
+                    if (cardTable.HowManyCards(player) == 0) // if false make the player stay
                     {
-                        cardTable.HowManyCards(player); // calling the HowManyCards function to getting the
-                        int numOfCards = cardTable.numOfCardsPicked; // here i am calling the numOfCardsPicked from cardTable
+                        player.status = PlayerStatus.stay;
+                    }
+                    else if (cardTable.numOfCardsPicked <= 3 && cardTable.numOfCardsPicked != 0) //if OfferACard is true call 1, 2, 3 cards then check score
+                    {
+                        int numOfCards = cardTable.numOfCardsPicked;
 
-                        for (var i = 0; i < numOfCards; i++) 
+                        for (int i = 0; i < numOfCards; i++) // this loops according to the number of cards needed. If 3, deals out and adds 3 cards.
                         {
-                            Card card = deck.DealTopCard(); ///////////////// BUG: THESE TWO LINES ARE CURRENTLY BEING SKIPPED
-                            player.cards.Add(card); ///////////////////////////////////////////////////////////////////
+                            Card card = deck.DealTopCard();
+                            player.cards.Add(card);
                         }
-
                         player.score = ScoreHand(player);
                         if (player.score > 21)
                         {
@@ -91,16 +92,12 @@ namespace RaceTo21
                             player.status = PlayerStatus.win;
                         }
                     }
-                    else
-                    {
-                        player.status = PlayerStatus.stay;
-                    }
                 }
                 cardTable.ShowHand(player);
                 nextTask = Task.CheckForEnd;
             }
             else if (nextTask == Task.CheckForEnd)
-            {
+            {   
                 if (CheckForWinAndBust() || !CheckActivePlayers())
                 {
                     Player winner = DoFinalScoring();
@@ -209,32 +206,23 @@ namespace RaceTo21
         public Player DoFinalScoring()
         {
             int highScore = 0;
-            //int overallScore;
-
+            
             foreach (var player in players)
             {
                 cardTable.ShowHand(player);
-                //if (player.status == PlayerStatus.win) // someone hit 21
-                //{
-                //    overallScore = player.gameScore;
-                //   //overallScore = overallScore + player.score; // ADD THE SCORE TO THE PLAYER'S OVERALL SCORE IF WIN
-
-                //    return player;
-                //}
-                //if (player.status == PlayerStatus.stay || player.status == PlayerStatus.active) // still could win...
-                //{
-                //    if (player.score > highScore)
-                //    {
-                //      highScore = player.score; // PLAYER'S OVERALL SCORE REMAINS THE SAME IF STAY
-
-                //        //overallScore = player.gameScore;
-                //    }
-                //}
-                //if (player.status == PlayerStatus.bust) // player went bust...
-                //{
-                //    overallScore = player.gameScore;
-                //    overallScore = overallScore - player.score; // DEDUCT THE SCORE FROM THE PLAYER'S OVERALL SCORE IF BUST
-                //}
+                if (player.status == PlayerStatus.win) // someone hit 21
+                {
+                    highScore = player.score;
+                    return player;
+                }
+                if (player.status == PlayerStatus.stay || player.status == PlayerStatus.active) // if all bust but one, the remaining player also can win
+                {
+                    if (player.score > highScore)
+                    {
+                        highScore = player.score;
+                    }
+                }
+                // if busted.
             }
             if (highScore > 0) // someone scored, anyway!
             {
@@ -243,5 +231,6 @@ namespace RaceTo21
             }
             return null; // everyone must have busted because nobody won!
         }
+
     }
 }

@@ -58,19 +58,19 @@ namespace RaceTo21
                     cardCounter++;
 
                     imageIDs[$"{keyofimage}"] = $"card_{cardSuit.ToLower()}_{pngName}.png"; // adding field and value to Dictionary imageIDs.
-                    
 
-                    //Console.WriteLine(imageIDs["KS"]);
-                    //Console.WriteLine(cards.id);
 
                 }
             }
 
+            /* View png names
             foreach (string key in imageIDs.Keys)
             {
                 Console.Write(key + ":" + imageIDs[key]); // show all png names
                 Console.WriteLine();
             }
+            */
+
         }
 
         public void Shuffle()

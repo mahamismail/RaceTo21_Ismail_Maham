@@ -9,16 +9,17 @@ namespace RaceTo21
 		public List<Card> cards = new List<Card>();
 		public PlayerStatus status = PlayerStatus.active;
 		public int score;
-		public int gameScore;
+		public int overallScore;
 
 		public Player(string n)
 		{
 			name = n;
         }
 
-		/* Introduces player by name
-		 * Called by CardTable object
-		 */
+		/* Function: Introduce() **********
+		 * Loops through number of players and introduces player by name.
+		 * Called by ShowPlayers() method in CardTable object.
+		 *********************************/
 		public void Introduce(int playerNum)
 		{
 			Console.WriteLine("Hello, my name is " + name + " and I am player #" + playerNum);
