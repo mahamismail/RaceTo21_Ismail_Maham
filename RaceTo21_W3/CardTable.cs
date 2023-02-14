@@ -27,6 +27,7 @@ namespace RaceTo21
                 || numberOfPlayers < 2 || numberOfPlayers > 8)
             {
                 Console.WriteLine("Invalid number of players.");
+                Console.WriteLine();
                 Console.Write("How many players?");
                 response = Console.ReadLine();
             }
@@ -76,6 +77,7 @@ namespace RaceTo21
          ************************************/
         public int HowManyCards(Player player)
         {
+            Console.WriteLine();
             Console.Write( player.name + ": How many? (0/1/2/3)");
             string response = Console.ReadLine();
 
@@ -98,6 +100,7 @@ namespace RaceTo21
             else
             {
                 Console.WriteLine("Invalid number of cards. Choose 0, 1, 2, or 3!");
+                Console.WriteLine();
                 Console.Write("How many players?");
                 response = Console.ReadLine();
             }
@@ -146,7 +149,7 @@ namespace RaceTo21
                         Console.Write(card.displayName + ", ");
                     }
                 }
-                Console.Write("=" + player.score + "/21 ");
+                Console.Write(" = " + player.score + "/21. ");
                 if (player.status != PlayerStatus.active)
                 {
                     Console.Write("(" + player.status.ToString().ToUpper() + ")");
@@ -197,12 +200,15 @@ namespace RaceTo21
         {
             if (player != null)
             {
+                Console.WriteLine();
                 Console.WriteLine(player.name + " wins!");
             }
             else
             {
+                Console.WriteLine();
                 Console.WriteLine("Everyone busted!");
             }
+            Console.WriteLine();
             Console.Write("Press <Enter> to exit... ");
             while (Console.ReadKey().Key != ConsoleKey.Enter) { }
         }

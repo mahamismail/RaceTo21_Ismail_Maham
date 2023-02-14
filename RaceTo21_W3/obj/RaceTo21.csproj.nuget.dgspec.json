@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\NEU\\Intermediate Programming\\Week 4\\RaceTo21_Ismail_Maham\\RaceTo21_Ismail_Maham\\RaceTo21_W3\\RaceTo21.csproj": {}
+    "D:\\NEU\\Advanced Digital Storytelling\\Week4\\Experiment\\RaceTo21_Ismail_Maham\\RaceTo21_W3\\RaceTo21.csproj": {}
   },
   "projects": {
-    "D:\\NEU\\Intermediate Programming\\Week 4\\RaceTo21_Ismail_Maham\\RaceTo21_Ismail_Maham\\RaceTo21_W3\\RaceTo21.csproj": {
+    "D:\\NEU\\Advanced Digital Storytelling\\Week4\\Experiment\\RaceTo21_Ismail_Maham\\RaceTo21_W3\\RaceTo21.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\NEU\\Intermediate Programming\\Week 4\\RaceTo21_Ismail_Maham\\RaceTo21_Ismail_Maham\\RaceTo21_W3\\RaceTo21.csproj",
+        "projectUniqueName": "D:\\NEU\\Advanced Digital Storytelling\\Week4\\Experiment\\RaceTo21_Ismail_Maham\\RaceTo21_W3\\RaceTo21.csproj",
         "projectName": "RaceTo21_W3",
-        "projectPath": "D:\\NEU\\Intermediate Programming\\Week 4\\RaceTo21_Ismail_Maham\\RaceTo21_Ismail_Maham\\RaceTo21_W3\\RaceTo21.csproj",
+        "projectPath": "D:\\NEU\\Advanced Digital Storytelling\\Week4\\Experiment\\RaceTo21_Ismail_Maham\\RaceTo21_W3\\RaceTo21.csproj",
         "packagesPath": "C:\\Users\\maham\\.nuget\\packages\\",
-        "outputPath": "D:\\NEU\\Intermediate Programming\\Week 4\\RaceTo21_Ismail_Maham\\RaceTo21_Ismail_Maham\\RaceTo21_W3\\obj\\",
+        "outputPath": "D:\\NEU\\Advanced Digital Storytelling\\Week4\\Experiment\\RaceTo21_Ismail_Maham\\RaceTo21_W3\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\maham\\AppData\\Roaming\\NuGet\\NuGet.Config",
