@@ -12,6 +12,9 @@ namespace RaceTo21
         int currentPlayer = 0; // current player on list
         public Task nextTask; // keeps track of game state
         private bool cheating = false; // lets you cheat for testing purposes if true
+        int overallTarget = 47; // the final overall score needed by on eplayer to win the game
+        int rounds = 0; // the number of rounds played
+
 
         public Game(CardTable c)
         {
@@ -21,20 +24,22 @@ namespace RaceTo21
             nextTask = Task.GetNumberOfPlayers;
         }
 
-        /* Adds a player to the current game
+        /* Function: AddPlayer()********
+         * Adds a player to the current game
          * Called by DoNextTask() method
-         */
+         *******************************/
         public void AddPlayer(string n)
         {
             players.Add(new Player(n));
 
         }
 
-        /* Figures out what task to do next in game
+        /* Function: DoNextTask() ********
+         * Figures out what task to do next in game
          * as represented by field nextTask
          * Calls methods required to complete task
          * then sets nextTask.
-         */
+         **********************************/
         public void DoNextTask()
         {
             Console.WriteLine("================================"); // this line should be elsewhere right?
@@ -56,19 +61,15 @@ namespace RaceTo21
             {   
                 cardTable.ShowPlayers(players);
                 nextTask = Task.PlayerTurn;
-                //nextTask = Task.ShowBigScores; // DISPLAY OVERALL SCORES
             }
-            //else if (nextTask == Task.ShowBigScores)
-            //{
-            //    //cardTable.ShowOverallScore(); // CALL FUNCTION SHOW OVERALL SCORE ////////////////////// NOT WORKING
-            //    nextTask = Task.PlayerTurn;
-            // }
+            
             else if (nextTask == Task.PlayerTurn)
             {
                 cardTable.ShowHands(players);
                 Player player = players[currentPlayer];
                 if (player.status == PlayerStatus.active)
                 {
+                    player.ResetRound(); // resetting round just in case to begin.
                     if (cardTable.HowManyCards(player) == 0) // if false make the player stay
                     {
                         player.status = PlayerStatus.stay;
@@ -82,7 +83,9 @@ namespace RaceTo21
                             Card card = deck.DealTopCard();
                             player.cards.Add(card);
                         }
+
                         player.score = ScoreHand(player);
+
                         if (player.score > 21)
                         {
                             player.status = PlayerStatus.bust;
@@ -97,11 +100,22 @@ namespace RaceTo21
                 nextTask = Task.CheckForEnd;
             }
             else if (nextTask == Task.CheckForEnd)
-            {   
+            {
+                rounds++; //round count at the end of every round
                 if (CheckForWinAndBust() || !CheckActivePlayers())
                 {
+                    
+                    cardTable.ShowHands(players);
                     Player winner = DoFinalScoring();
                     cardTable.AnnounceWinner(winner);
+
+                    foreach (Player player in players)
+                    {
+                        if (player.overallScore == overallTarget)
+                        {
+                            cardTable.AnnounceOverallWinner(winner);
+                        }
+                    }
                     nextTask = Task.GameOver;
                 }
                 else
@@ -230,6 +244,34 @@ namespace RaceTo21
                 return players.Find(player => player.score == highScore);
             }
             return null; // everyone must have busted because nobody won!
+        }
+
+        public void DoOverallScoring()
+        {
+            
+            foreach (var player in players)
+            {
+                int overallScore = player.overallScore;
+
+                if (player.status == PlayerStatus.win) // someone hit 21
+                {
+                    overallScore += 20;
+                    cardTable.ShowOverallScore(player);
+                }
+                else
+                {
+                    if (player.status == PlayerStatus.stay) // if all bust but one, the remaining player also can win
+                    {
+                        cardTable.ShowOverallScore(player);
+                    }
+
+                    if (player.status == PlayerStatus.bust)
+                    {
+                        overallScore -= (21 - player.score);
+                        cardTable.ShowOverallScore(player);
+                    }
+                }
+            }
         }
 
     }

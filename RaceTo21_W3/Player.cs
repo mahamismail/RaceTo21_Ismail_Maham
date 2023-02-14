@@ -24,6 +24,30 @@ namespace RaceTo21
 		{
 			Console.WriteLine("Hello, my name is " + name + " and I am player #" + playerNum);
 		}
+
+		/* Function: ClearHand() **********
+         * Removes the cards from the player's hands
+         ************************************/
+		public void ClearHand()
+		{
+			cards.Clear();
+		}
+
+		/*Function: ResetRound() ***************
+		* Reset the round and set all players to active.
+		* 
+		*/
+		public void ResetRound()
+		{
+			ClearHand();
+			status = PlayerStatus.active; // make all status active again.
+		}
+
+		public void BeginRound()
+		{
+			ClearHand();
+			status = PlayerStatus.active; // make all status active again.
+		}
 	}
 }
 

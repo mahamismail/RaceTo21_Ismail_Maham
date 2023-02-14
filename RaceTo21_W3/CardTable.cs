@@ -174,13 +174,14 @@ namespace RaceTo21
             }
         }
 
+
         /* Function: ShowOverallScore() ****************
          * Displays overall scores of all players
          * Called by Game object at the end of the game.
          * Game object provides player name and overallScore.
          *****************************************/
 
-        /*public void ShowOverallScore(Player player)
+        public void ShowOverallScore(Player player)
         {
             Console.Write(player.name + "'s Overall Score: " + player.overallScore);
         }
@@ -192,7 +193,6 @@ namespace RaceTo21
                 ShowOverallScore(player);
             }
         }
-        */
 
         /* Function: AnnounceWinner() **********
          ************************************/
@@ -211,6 +211,11 @@ namespace RaceTo21
             Console.WriteLine();
             Console.Write("Press <Enter> to exit... ");
             while (Console.ReadKey().Key != ConsoleKey.Enter) { }
+        }
+
+        public void AnnounceOverallWinner(Player player)
+        {
+            Console.Write("THE OVERALL WINNER OF THIS GAME IS: " + player.name);
         }
     }
 
